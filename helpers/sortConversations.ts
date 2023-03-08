@@ -1,20 +1,17 @@
-import { Conversation } from "../types";
+import { ConversationPreview } from "../types";
 import dayjs from "dayjs";
 
-const sortConversations = (conversations: Conversation[]): Conversation[] => {
+const sortConversations = (conversations: ConversationPreview[]): ConversationPreview[] => {
   if (conversations.length <= 1) {
     return conversations;
   }
   const sortedConversations = conversations
     .slice()
-    .sort((a: Conversation, b: Conversation): number => {
-      const lastMessageA = a.messages[a.messages.length - 1];
-
-      const lastMessageB = b.messages[b.messages.length - 1];
+    .sort((a: ConversationPreview, b: ConversationPreview): number => {
       return dayjs(
-        lastMessageB && lastMessageB.time ? lastMessageB.time : b.createdAt
+        b.updated_at
       ).isAfter(
-        lastMessageA && lastMessageA.time ? lastMessageA.time : a.createdAt
+        a.updated_at
       )
         ? 1
         : -1;

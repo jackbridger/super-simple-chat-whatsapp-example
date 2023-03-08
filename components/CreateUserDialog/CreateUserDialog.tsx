@@ -19,7 +19,6 @@ export default function CreateUserDialog({
 
   const _createUser = async () => {
     const token: string = await createToken(username);
-    console.log("token ",token)
     const user:User = {
       id:username,
       username:username,

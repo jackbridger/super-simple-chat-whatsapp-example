@@ -10,7 +10,6 @@ import {
 import styles from "./UserPreview.styles";
 import { User, Conversation } from "../../types";
 import createConversation from "../../api/createConversation";
-import formatConversation from "../../helpers/formatConversation";
 import images from "../../assets/index";
 import { RootState } from "../../redux/store";
 
@@ -27,26 +26,27 @@ export default function UserPreview(props: UserPreviewProps) {
   const currentUser = useSelector(
     (state: RootState) => state.users.currentUser
   );
+  const token = useSelector(
+    (state: RootState) => state.users.token
+  );
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const profileImg = images[0];
 
   const _onPress = () => {
-    if (currentUser) {
-      createConversation([user.id, currentUser.id], user.username, user.id)
+
+    if (currentUser && token) {
+      createConversation([user.id], `${user.display_name}`, currentUser.id, token)
         .then((conversation) => {
-          const formattedConversation = formatConversation(conversation);
-
-          dispatch(setCurrentConversation(formattedConversation));
-          dispatch(addNewConversation(formattedConversation));
-
+          dispatch(setCurrentConversation(conversation));
+          dispatch(addNewConversation(conversation));
           navigation.dispatch((state) => {
             const routes = state.routes.filter(
               (r) => r.name !== "CreateNewChat"
             );
             const chatRoute = {
               name: "Chat",
-              params: { conversation: formattedConversation },
+              params: { conversation },
               path: undefined,
             };
             const newRoutes = [...routes, chatRoute];
@@ -68,7 +68,7 @@ export default function UserPreview(props: UserPreviewProps) {
       <View style={styles.imgAndMsgSubContainer}>
         <Image style={styles.profileImg} source={profileImg} />
         <View>
-          <Text style={styles.msgTitle}>{user.username}</Text>
+          <Text style={styles.msgTitle}>{user.display_name}</Text>
           <Text style={styles.msgSubTitle}>Available</Text>
         </View>
       </View>

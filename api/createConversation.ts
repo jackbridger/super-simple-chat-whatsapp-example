@@ -1,22 +1,24 @@
-import ngrokURL from "../constants/ngrokURL";
+import baseURL from "../constants/baseURL";
 
-const myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
+
 
 export default async function createConversation(
   participantIDs: string[],
-  groupName: string,
-  ownerID: string
+  name: string,
+  ownerID: string,
+  token:string
 ) {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", `Bearer ${token}`);
   const uniqueparticipantIDs = [...new Set([...participantIDs, ownerID])];
 
   const raw = JSON.stringify({
     owner_id: ownerID,
-    group_name: groupName,
+    name: "Test ",
     participant_ids: uniqueparticipantIDs,
   });
-  const baseURL = ngrokURL;
-  const createConversationURL: string = `${baseURL}/conversations/create`;
+  const createConversationURL: string = `${baseURL}/channels`;
 
   const requestOptions: RequestInit = {
     method: "POST",

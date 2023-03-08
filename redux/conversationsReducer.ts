@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { Conversation, Message } from "../types";
+import { Conversation, Message,ConversationPreview } from "../types";
 import sortConversations from "../helpers/sortConversations";
 import storage from "@react-native-async-storage/async-storage";
 import { PURGE } from "redux-persist";
 
 export interface ConversationState {
-  conversations: Conversation[];
-  currentConversation: Conversation | null;
+  conversations: ConversationPreview[];
+  currentConversation: ConversationPreview | null;
 }
 
 const initialState: ConversationState = {
@@ -22,13 +22,13 @@ export const conversationsSlice = createSlice({
   reducers: {
     addAllConversations: (
       state: ConversationState,
-      action: PayloadAction<Conversation[]>
+      action: PayloadAction<ConversationPreview[]>
     ): void => {
       state.conversations = sortConversations(action.payload);
     },
     setCurrentConversation: (
       state: ConversationState,
-      action: PayloadAction<Conversation>
+      action: PayloadAction<ConversationPreview>
     ): void => {
       if (action.payload) {
         state.currentConversation = action.payload;
@@ -36,7 +36,7 @@ export const conversationsSlice = createSlice({
     },
     addNewConversation: (
       state: ConversationState,
-      action: PayloadAction<Conversation>
+      action: PayloadAction<ConversationPreview>
     ): void => {
       if (action.payload) {
         const conversationAlreadyExists = state.conversations.find(
@@ -52,7 +52,7 @@ export const conversationsSlice = createSlice({
     },
     markConversationAsRead: (
       state: ConversationState,
-      action: PayloadAction<Conversation>
+      action: PayloadAction<ConversationPreview>
     ): void => {
       if (action.payload) {
         const conversationToUpdate = state.conversations.find(

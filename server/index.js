@@ -1,12 +1,15 @@
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import fetch,{Headers} from 'node-fetch'
+import express from 'express'
 const app = express()
 dotenv.config()
 
 const port = 3002
 const API_KEY = process.env.CHAT_API_KEY
-const APP_ID = process.env.CHAT_APP_ID
+console.log({API_KEY})
 
+const APP_ID = process.env.CHAT_APP_ID
+console.log({APP_ID })
 app.use(express.json()) 
 
 app.post('/user-token', async (req, res) => {
@@ -28,7 +31,8 @@ const getToken = async (userID) => {
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
       "app_id": APP_ID,
-      "user_id": userID
+      "user_id": userID,
+      "display_name":userID
     });
     
     var requestOptions = {

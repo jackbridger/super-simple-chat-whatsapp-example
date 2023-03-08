@@ -1,17 +1,13 @@
-import { useSelector } from "react-redux";
-import { SupabaseUser, User } from "../types";
-import ngrokURL from "../constants/ngrokURL";
-import { RootState } from "../redux/store";
+import { User } from "../types";
+import baseURL from "../constants/baseURL";
 
-
-export default async function (): Promise<User[]> {
+export default async function (token:string): Promise<User[]> {
   try {
-    const users = await getAllUsers()
+    const users = await getAllUsers(token)
     const formattedData: User[] = users.map((user: {display_name:string,id:string}) => {
       return {
         id: user.id,
-        username: user.display_name,
-        createdAt: new Date().toString(), // to update
+        display_name: user.display_name,
       };
     });
 
@@ -22,8 +18,7 @@ export default async function (): Promise<User[]> {
   }
 }
 
-const getAllUsers =  async () => {
-  const token = useSelector((state: RootState) => state.users.token);
+const getAllUsers =  async (token:string) => {
   const myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
 
@@ -33,10 +28,11 @@ const getAllUsers =  async () => {
       redirect: 'follow'
   };
   try{
-    const res = await fetch("http://api.supersimplechat.com/users/", requestOptions)
+    const res = await fetch(`${baseURL}/users`, requestOptions)
     const users = await res.json()
     return users
   }catch(err){
+    console.log(err)
     return []
   }
   

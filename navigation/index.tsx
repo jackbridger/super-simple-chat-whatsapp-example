@@ -9,14 +9,13 @@ import Chat from "../screens/Chat/Chat";
 import CreateNewChat from "../screens/CreateNewChat/CreateNewChat";
 import { useEffect } from "react";
 
-import { RootStackParamList, SupabaseConversation } from "../types";
+import { RootStackParamList } from "../types";
 import ChatHeader from "./ChatHeader";
 import CreateChatHeader from "./CreateChatHeader";
 import { RootState } from "../redux/store";
-import ngrokURL from "../constants/ngrokURL";
+import ngrokURL from "../constants/baseURL";
 import { addNewConversation, sendMessage } from "../redux/conversationsReducer";
 import { Message, SupabaseMessage } from "../types";
-import formatConversation from "../helpers/formatConversation";
 
 const socket = io(ngrokURL);
 
@@ -38,8 +37,7 @@ function RootNavigator() {
     if (currentUser) {
       socket.emit("join", {
         id: currentUser.id,
-        username: currentUser.username,
-        created_at: currentUser.createdAt,
+        display_name: currentUser.display_name,
       });
       socket.on("message", (message: SupabaseMessage) => {
         const newMessage: Message = {
@@ -52,9 +50,8 @@ function RootNavigator() {
         };
         dispatch(sendMessage(newMessage));
       });
-      socket.on("newConversation", (conv: SupabaseConversation) => {
-        const conversation = formatConversation(conv);
-        dispatch(addNewConversation(conversation));
+      socket.on("newConversation", (conv) => {
+        dispatch(addNewConversation(conv));
       });
     }
 

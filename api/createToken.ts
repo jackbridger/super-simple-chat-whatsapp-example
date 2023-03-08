@@ -1,8 +1,5 @@
-import ngrokURL from "../constants/ngrokURL";
-import { SupabaseUser, User } from "../types";
-
 export default async function createToken(username: string): Promise<string> {
-  const baseURL = ngrokURL;
+  const baseURL = 'https://2f5f-2a02-c7c-365f-6600-6188-9004-508b-9428.eu.ngrok.io';
 
   const createTokenURL: string = `${baseURL}/user-token`;
   var myHeaders = new Headers();
@@ -10,6 +7,7 @@ export default async function createToken(username: string): Promise<string> {
 
   var raw = JSON.stringify({
     user_id:username,
+    
   });
 
   var requestOptions: RequestInit = {

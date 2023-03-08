@@ -1,6 +1,5 @@
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useContext } from "react";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 
@@ -8,30 +7,30 @@ import {
   setCurrentConversation,
   markConversationAsRead,
 } from "../../redux/conversationsReducer";
-import { Conversation } from "../../types";
+import {  ConversationPreview } from "../../types";
 import styles from "./ConversationPreview.styles";
 import images from "../../assets/index";
 import getRandomProfilePicture from "../../helpers/getRandomProfilePicture";
 import Colors from "../../constants/Colors";
 
 interface ConversationPreviewProps {
-  conversation: Conversation;
+  conversation: ConversationPreview;
 }
 
 interface ChatRouteParams {
-  conversation: Conversation;
+  conversation: ConversationPreview;
 }
 
-export default function ConversationPreview(props: ConversationPreviewProps) {
+export default function ConversationPrev(props: ConversationPreviewProps) {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { conversation } = props;
-  const hasMessage = conversation.messages.length > 0;
-  const lastMessage = conversation.messages[conversation.messages.length - 1];
-  const lastUpdateTime = hasMessage ? lastMessage.time : conversation.createdAt;
-  const hasUnreadMessages = hasMessage && !lastMessage.isRead;
+  const hasMessage = !!conversation.last_message;
+  const lastMessage = conversation.last_message;
+  const lastUpdateTime = conversation.updated_at;
+  const hasUnreadMessages = true // to do: fix this
 
-  const profileImg = images[conversation.randomProfilePicture];
+  const profileImg = images[1]; // to do: fix this
 
   const chatRouteParams: ChatRouteParams = {
     conversation,
@@ -56,7 +55,7 @@ export default function ConversationPreview(props: ConversationPreviewProps) {
             ellipsizeMode="tail"
             style={styles.msgPreview}
           >
-            {hasMessage ? lastMessage.message : ""}
+            {hasMessage ? lastMessage : ""}
           </Text>
         </View>
       </View>

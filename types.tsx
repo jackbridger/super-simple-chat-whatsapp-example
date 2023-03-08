@@ -13,7 +13,7 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  Chat: { conversation: Conversation };
+  Chat: { conversation: ConversationPreview };
   CreateNewChat: undefined;
 };
 
@@ -41,6 +41,13 @@ export interface Conversation {
   randomProfilePicture: number;
   participants: User[];
 }
+export interface ConversationPreview {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at:string;
+  last_message:string | null;
+}
 
 export interface Message {
   id: string;
@@ -57,14 +64,9 @@ export interface MessageData {
 
 export interface User {
   id: string;
-  username: string;
-  createdAt: string;
+  display_name: string;
 }
-export interface SupabaseUser {
-  id: string;
-  username: string;
-  created_at: string;
-}
+
 export interface SupabaseMessage {
   id: string;
   conversation_id: string;
@@ -75,14 +77,14 @@ export interface SupabaseMessage {
   message: string;
   created_at: string;
 }
-export interface SupabaseConversation {
-  id: string;
-  name: string;
-  messages: SupabaseMessage[];
-  owner_user_id: string;
-  created_at: string;
-  participants: SupabaseUser[];
-}
+// export interface SupabaseConversation {
+//   id: string;
+//   name: string;
+//   messages: SupabaseMessage[];
+//   owner_user_id: string;
+//   created_at: string;
+//   participants: User[];
+// }
 
 export interface MyResponse {
   data: Conversation[] | null;

@@ -1,7 +1,5 @@
 import { Conversation, Message } from "../types";
-import ngrokURL from "../constants/ngrokURL";
-
-const baseURL = ngrokURL;
+import baseURL from "../constants/baseURL";
 
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
