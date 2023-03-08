@@ -1,9 +1,11 @@
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import fetch,{Headers} from 'node-fetch'
 const app = express()
+dotenv.config()
 
 const port = 3002
-const API_KEY = 'b8f9feba-be7f-4a35-8883-cd82d0606675'
-const APP_ID = "0338dae0-0b2a-4582-8244-292aef3996d0"
+const API_KEY = process.env.CHAT_API_KEY
+const APP_ID = process.env.CHAT_APP_ID
 
 app.use(express.json()) 
 
