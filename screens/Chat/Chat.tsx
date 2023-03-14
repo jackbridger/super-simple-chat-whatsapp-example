@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import SendButton from "../../components/SendButton/SendButton";
 import ChatMessages from "../../components/ChatMessages/ChatMessages";
-import { Conversation, ConversationPreview } from "../../types";
+import { Conversation, ConversationPreviewType } from "../../types";
 import { RootState } from "../../redux/store";
 import getConversation from "../../api/getConversation";
 import getMessagesByChannel from "../../api/getMessagesByChannel";
@@ -15,7 +15,7 @@ interface ChatProps {
   route: RouteProp<
     {
       params: {
-        conversation: ConversationPreview;
+        conversation: ConversationPreviewType;
       };
     },
     "params"
@@ -23,26 +23,26 @@ interface ChatProps {
 }
 
 export default function Chat(props: ChatProps) {
-  const { conversation } = props.route.params;
+  const { conversation: receivedConvo } = props.route.params;
+  const [thisChannel,setThisChannel] = useState<Conversation | null>(null)
+
   const [messages, setMessages] = useState([])
   const token = useSelector((state: RootState) => state.users.token);
   useEffect(()=> {
-    console.log({conversation})
-    if (token && conversation) {
-      getConversation(conversation.id,token).then((conversation) => {
-        console.log("conversation returned ")
-        console.log(conversation)
+    if (token && receivedConvo) {
+      getConversation(receivedConvo.id,token).then((conversation) => {
+        if (conversation.data) {
+          setThisChannel(conversation.data)
+        }
       })
     }
-    if (token && conversation) {
-      getMessagesByChannel(conversation.id,token).then((_messages) => {
-        console.log("_messages")
-        console.log(_messages)
-        setMessages(_messages)
+    if (token && receivedConvo) {
+      getMessagesByChannel(receivedConvo.id,token).then((_messages) => {
+        setMessages(_messages.data)
       })
     }
 
-  },[conversation])
+  },[receivedConvo])
 
   // const conversation = useSelector(
   //   (state: RootState) => state.conversations.currentConversation
@@ -53,24 +53,28 @@ export default function Chat(props: ChatProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [heightOfMessageBox, setHeightOfMessageBox] = useState(0);
 
-  return conversation ? (
+  return receivedConvo ? (
     <View style={styles.mainContainer}>
       <ImageBackground
         style={styles.backgroundImg}
         source={require(whatsappBackgroundImg)}
         resizeMode="cover"
       >
-        {/* <ChatMessages
+        <ChatMessages
           heightOfMessageBox={heightOfMessageBox}
           messages={messages}
         />
-        <SendButton
+        {thisChannel
+          && <SendButton
           setIsTyping={setIsTyping}
           isTyping={isTyping}
           setHeightOfMessageBox={setHeightOfMessageBox}
           heightOfMessageBox={heightOfMessageBox}
-          thisConversation={conversation}
-        /> */}
+          thisConversation={thisChannel}
+          messages={messages}
+        />
+      }
+        
       </ImageBackground>
     </View>
   ) : (

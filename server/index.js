@@ -1,8 +1,13 @@
 import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import fetch,{Headers} from 'node-fetch'
 import express from 'express'
+
+const baseURL = "http://api.supersimplechat.com";
 const app = express()
 dotenv.config()
+
+
+console.log(baseURL)
 
 const port = 3002
 const API_KEY = process.env.CHAT_API_KEY
@@ -44,7 +49,7 @@ const getToken = async (userID) => {
 
     // turn the below fetch into try await
   try {
-      const res = await fetch("http://localhost:3001/users/token", requestOptions)
+      const res = await fetch(`${baseURL}/users/token`, requestOptions)
       console.log(res)
       const token = await res.text()
       console.log(token)

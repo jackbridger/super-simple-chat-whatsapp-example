@@ -25,6 +25,7 @@ export default function CreateNewChat() {
   const dispatch = useDispatch();
   useEffect(() => {
     if (token) {
+      console.log({token})
       getAllUsers(token).then((users) => {
         dispatch(addAllUsers(users));
       });

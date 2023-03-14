@@ -8,7 +8,7 @@ import Navigation from "./navigation";
 
 const persistor = persistStore(store);
 // use this to clear out all the data
-persistor.purge();
+// persistor.purge();
 
 export default function App() {
   return (

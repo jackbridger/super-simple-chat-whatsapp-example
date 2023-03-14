@@ -1,13 +1,13 @@
-import { ConversationPreview } from "../types";
+import { ConversationPreviewType } from "../types";
 import dayjs from "dayjs";
 
-const sortConversations = (conversations: ConversationPreview[]): ConversationPreview[] => {
+const sortConversations = (conversations: ConversationPreviewType[]): ConversationPreviewType[] => {
   if (conversations.length <= 1) {
     return conversations;
   }
   const sortedConversations = conversations
     .slice()
-    .sort((a: ConversationPreview, b: ConversationPreview): number => {
+    .sort((a: ConversationPreviewType, b: ConversationPreviewType): number => {
       return dayjs(
         b.updated_at
       ).isAfter(

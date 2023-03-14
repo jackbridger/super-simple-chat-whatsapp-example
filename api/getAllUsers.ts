@@ -4,6 +4,7 @@ import baseURL from "../constants/baseURL";
 export default async function (token:string): Promise<User[]> {
   try {
     const users = await getAllUsers(token)
+
     const formattedData: User[] = users.map((user: {display_name:string,id:string}) => {
       return {
         id: user.id,
@@ -29,8 +30,7 @@ const getAllUsers =  async (token:string) => {
   };
   try{
     const res = await fetch(`${baseURL}/users`, requestOptions)
-    const users = await res.json()
-    return users
+    return res.json()
   }catch(err){
     console.log(err)
     return []

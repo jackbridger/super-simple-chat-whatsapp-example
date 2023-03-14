@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Colors from "../../constants/Colors";
 import useKeyboardOffsetHeight from "../../helpers/useKeyboardOffsetHeight";
-import { Conversation } from "../../types";
+import { Conversation, Message } from "../../types";
 import {
   sendMessage,
   markConversationAsRead,
@@ -50,22 +50,27 @@ interface SendButtonProps {
   setHeightOfMessageBox: (height: number) => void;
   heightOfMessageBox: number;
   thisConversation: Conversation;
+  messages: Message[]
 }
 export default function SendButton(props: SendButtonProps) {
   const dispatch = useDispatch();
   const currentUser = useSelector(
     (state: RootState) => state.users.currentUser
   );
+  const token = useSelector(
+    (state: RootState) => state.users.token
+  );
   const whatsappBackgroundImg = "../../assets/images/whatsapp.png";
-  const { setIsTyping, isTyping, setHeightOfMessageBox, thisConversation } =
+  const { setIsTyping, isTyping, setHeightOfMessageBox, thisConversation,messages } =
     props;
-  const hasUnreadMessages =
-    thisConversation.messages.length > 0 &&
-    !thisConversation.messages[thisConversation.messages.length - 1].isRead;
+  // const hasUnreadMessages =
+  //   messages.length > 0 &&
+  //   !messages[thisConversation.messages.length - 1].isRead;
   const [newMsg, setNewMsg] = useState("");
   const ref = useRef<TransitioningView | null>(null);
   const keyBoardOffsetHeight = useKeyboardOffsetHeight();
   const userID = currentUser?.id;
+  console.log({currentUser})
 
   const windowHeight = Dimensions.get("window").height;
 
@@ -145,12 +150,12 @@ export default function SendButton(props: SendButtonProps) {
                   isTyping,
                   setIsTyping
                 );
-                if (message) {
-                  addNewMessage(message).then((res) => {
+                if (message && token) {
+                  addNewMessage(message,token).then((res) => {
                     dispatch(sendMessage(message));
-                    if (!hasUnreadMessages) {
-                      dispatch(markConversationAsRead(thisConversation));
-                    }
+                    // if (!hasUnreadMessages) {
+                    //   dispatch(markConversationAsRead(thisConversation));
+                    // }
                   });
                 }
               }

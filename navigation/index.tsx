@@ -13,11 +13,11 @@ import { RootStackParamList } from "../types";
 import ChatHeader from "./ChatHeader";
 import CreateChatHeader from "./CreateChatHeader";
 import { RootState } from "../redux/store";
-import ngrokURL from "../constants/baseURL";
+import baseURL from "../constants/baseURL";
 import { addNewConversation, sendMessage } from "../redux/conversationsReducer";
 import { Message, SupabaseMessage } from "../types";
 
-const socket = io(ngrokURL);
+const socket = io(baseURL);
 
 export default function Navigation() {
   return (

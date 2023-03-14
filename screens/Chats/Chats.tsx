@@ -6,18 +6,18 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
 
 import ConversationPreview from "../../components/ConversationPreview/ConversationPreview";
-import { Conversation, RootTabScreenProps, User } from "../../types";
+import { ConversationPreviewType, RootTabScreenProps } from "../../types";
 import type { RootState } from "../../redux/store";
 import { addAllConversations } from "../../redux/conversationsReducer";
 import { setCurrentUser } from "../../redux/usersReducer";
-import getAllConversations from "../../api/getAllConversations";
+import getAllChannels from "../../api/getAllChannels";
 import styles from "./Chats.styles";
 import Colors from "../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import CreateUserDialog from "../../components/CreateUserDialog/CreateUserDialog";
 
 interface ConversationItemProps {
-  item: Conversation;
+  item: ConversationPreviewType;
 }
 export default function ChatsScreen({}: RootTabScreenProps<"Chats">) {
   const [showUserDialog, setShowUserDialog] = useState<boolean>(false);
@@ -26,14 +26,17 @@ export default function ChatsScreen({}: RootTabScreenProps<"Chats">) {
   const currentUser = useSelector(
     (state: RootState) => state.users.currentUser
   );
+  const token = useSelector(
+    (state: RootState) => state.users.token
+  );
   const conversations = useSelector(
     (state: RootState) => state.conversations.conversations
   );
   useEffect(() => {
-    if (!currentUser) {
+    if (!token) {
       setShowUserDialog(true);
-    } else if (currentUser)
-      getAllConversations(currentUser.id).then((res) => {
+    } else
+      getAllChannels(token).then((res) => {
         const conversations = res.data;
         if (conversations) {
           dispatch(addAllConversations(conversations));

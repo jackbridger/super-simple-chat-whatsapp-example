@@ -1,14 +1,13 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { MyResponse } from "../types";
+import { ConversationPreviewType, MyResponse } from "../types";
 import baseURL from "../constants/baseURL";
 
 
-export default async function getAllConversations(
-  userID: string
+export default async function getAllChannels(token:string
 ): Promise<MyResponse> {
   try {
-    const channels = await getAllChannels()
+    const channels = await _getAllChannels(token)
     return {
       data: channels,
       status: 200,
@@ -27,8 +26,8 @@ export default async function getAllConversations(
 }
 
 
-const getAllChannels = async () => {
-  const token = useSelector((state: RootState) => state.users.token);
+const _getAllChannels = async (token:string) => {
+
   var myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
 
@@ -38,14 +37,8 @@ const getAllChannels = async () => {
     redirect: 'follow'
   };
   try {
-    const res = await fetch("http://api.supersimplechat.com/channels/", requestOptions)
-    const json:    {
-      id:string,
-      name:string,
-      owner_user_id:string,
-      created_at:string
-      updated_at:string
-  }[] = await res.json()
+    const res = await fetch(`${baseURL}/channels/`, requestOptions)
+    const json:ConversationPreviewType[] = await res.json()
     return json
   }catch(err){
     console.log(err);

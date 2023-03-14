@@ -7,18 +7,18 @@ import {
   setCurrentConversation,
   markConversationAsRead,
 } from "../../redux/conversationsReducer";
-import {  ConversationPreview } from "../../types";
+import {  ConversationPreviewType } from "../../types";
 import styles from "./ConversationPreview.styles";
 import images from "../../assets/index";
 import getRandomProfilePicture from "../../helpers/getRandomProfilePicture";
 import Colors from "../../constants/Colors";
 
 interface ConversationPreviewProps {
-  conversation: ConversationPreview;
+  conversation: ConversationPreviewType;
 }
 
 interface ChatRouteParams {
-  conversation: ConversationPreview;
+  conversation: ConversationPreviewType;
 }
 
 export default function ConversationPrev(props: ConversationPreviewProps) {

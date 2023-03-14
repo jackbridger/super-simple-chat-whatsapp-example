@@ -13,7 +13,7 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  Chat: { conversation: ConversationPreview };
+  Chat: { conversation: ConversationPreviewType };
   CreateNewChat: undefined;
 };
 
@@ -41,7 +41,7 @@ export interface Conversation {
   randomProfilePicture: number;
   participants: User[];
 }
-export interface ConversationPreview {
+export interface ConversationPreviewType {
   id: string;
   name: string;
   created_at: string;
@@ -87,7 +87,7 @@ export interface SupabaseMessage {
 // }
 
 export interface MyResponse {
-  data: Conversation[] | null;
+  data: ConversationPreviewType[] | null;
   status: number;
   message: string;
 }

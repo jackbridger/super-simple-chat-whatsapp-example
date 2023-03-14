@@ -24,7 +24,7 @@ export default function ChatMessages(props: ChatMessagesProps) {
     const { item } = props;
     return <MessageBubble message={item} />;
   };
-
+  console.log({messages})
   return (
     <View
       style={{
@@ -34,12 +34,12 @@ export default function ChatMessages(props: ChatMessagesProps) {
           getMessageHeightOffset(heightOfMessageBox, windowHeight),
       }}
     >
-      <FlashList
+      {/* <FlashList
         inverted
         data={[...messages].reverse()}
         renderItem={renderMessageBubble}
         estimatedItemSize={40}
-      />
+      /> */}
     </View>
   );
 }

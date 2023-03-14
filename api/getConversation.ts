@@ -1,10 +1,14 @@
 import baseURL from "../constants/baseURL";
-import { MyResponse } from "../types";
+import { Conversation } from "../types";
 
 export default async function getConversation(
   channelID: string,
   token:string
-): Promise<MyResponse> {
+): Promise<{
+  data: Conversation | null;
+  status: number;
+  message: string;
+}> {
   try {
     const channels = await _getChannel(channelID,token)
     return {

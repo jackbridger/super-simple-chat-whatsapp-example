@@ -1,19 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { Conversation, Message,ConversationPreview } from "../types";
+import { Conversation, Message,ConversationPreviewType } from "../types";
 import sortConversations from "../helpers/sortConversations";
 import storage from "@react-native-async-storage/async-storage";
 import { PURGE } from "redux-persist";
 
 export interface ConversationState {
-  conversations: ConversationPreview[];
-  currentConversation: ConversationPreview | null;
+  conversations: ConversationPreviewType[];
+  currentConversation: ConversationPreviewType | null;
+  currentConversationMessages: Message[];
 }
 
 const initialState: ConversationState = {
   conversations: [],
   currentConversation: null,
+  currentConversationMessages:[]
 };
 
 export const conversationsSlice = createSlice({
@@ -22,13 +24,13 @@ export const conversationsSlice = createSlice({
   reducers: {
     addAllConversations: (
       state: ConversationState,
-      action: PayloadAction<ConversationPreview[]>
+      action: PayloadAction<ConversationPreviewType[]>
     ): void => {
       state.conversations = sortConversations(action.payload);
     },
     setCurrentConversation: (
       state: ConversationState,
-      action: PayloadAction<ConversationPreview>
+      action: PayloadAction<ConversationPreviewType>
     ): void => {
       if (action.payload) {
         state.currentConversation = action.payload;
@@ -36,7 +38,7 @@ export const conversationsSlice = createSlice({
     },
     addNewConversation: (
       state: ConversationState,
-      action: PayloadAction<ConversationPreview>
+      action: PayloadAction<ConversationPreviewType>
     ): void => {
       if (action.payload) {
         const conversationAlreadyExists = state.conversations.find(
@@ -52,39 +54,16 @@ export const conversationsSlice = createSlice({
     },
     markConversationAsRead: (
       state: ConversationState,
-      action: PayloadAction<ConversationPreview>
+      action: PayloadAction<ConversationPreviewType>
     ): void => {
-      if (action.payload) {
-        const conversationToUpdate = state.conversations.find(
-          (conversation) => conversation.id === action.payload.id
-        );
-        if (conversationToUpdate) {
-          conversationToUpdate.messages.forEach((message) => {
-            message.isRead = true;
-          });
-        }
-      }
+      console.log('to do')
     },
     sendMessage: (
       state: ConversationState,
       action: PayloadAction<Message>
     ): void => {
       const message = action.payload;
-      const conversationToUpdate = state.conversations.find(
-        (conversation) => conversation.id === message.conversationID
-      );
-      if (conversationToUpdate) {
-        conversationToUpdate.messages.push(message);
-      }
-      if (
-        state.currentConversation &&
-        message.conversationID === state.currentConversation.id
-      ) {
-        state.currentConversation.messages.push(message);
-      }
-      state.conversations = JSON.parse(
-        JSON.stringify(sortConversations(state.conversations))
-      );
+      state.currentConversationMessages.push(message);
     },
   },
   extraReducers: (builder) => {
